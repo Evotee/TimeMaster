@@ -1,24 +1,38 @@
 package com.example.timemaster;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.CalendarView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        CalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year,
+                                            int month, int dayOfMonth) {
+                // Форматируем выбранную дату
+                String selectedDate = String.format("%02d-%02d-%d", month + 1, dayOfMonth, year);
+
+                // Создаем Intent для перехода на SecondActivity
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.putExtra("SELECTED_DATE", selectedDate); // Передаем выбранную дату
+
+                // Запускаем SecondActivity
+                startActivity(intent);
+
+                // Показываем Toast с выбранной датой (по желанию)
+                Toast.makeText(getApplicationContext(), selectedDate, Toast.LENGTH_LONG).show();
+            }
         });
     }
 }
