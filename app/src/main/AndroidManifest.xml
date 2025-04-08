@@ -23,9 +23,9 @@
         </activity>
 
         <!-- Добавьте следующую строку для вашей второй активности -->
-        <activity
-            android:name=".SecondActivity"
-            android:exported="true" />
+        <activity android:name=".SecondActivity"></activity>
+        <activity android:name=".ThirdActivity"></activity>
+
     </application>
 
 </manifest>
