@@ -14,7 +14,7 @@ public class ThirdActivity extends AppCompatActivity {
 
     private CheckBox checkBox1, checkBox2, checkBox3;
     private EditText editText;
-    private Button buttonSave;
+    private Button buttonSave, buttonBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,7 @@ public class ThirdActivity extends AppCompatActivity {
         checkBox3 = findViewById(R.id.checkBox3);
         editText = findViewById(R.id.editText);
         buttonSave = findViewById(R.id.button_save);
+        buttonBack = findViewById(R.id.button_back); // Инициализация кнопки "Назад"
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +41,14 @@ public class ThirdActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(ThirdActivity.this, "Please enter a name", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        // Обработчик нажатия кнопки "Назад"
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Закрываем ThirdActivity и возвращаемся в SecondActivity
             }
         });
     }
