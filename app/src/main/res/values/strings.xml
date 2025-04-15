@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TimeMaster</string>
+    <string name="clear_all">Очистить все</string> <!-- Описание для кнопки с мусорной корзиной -->
 </resources>
