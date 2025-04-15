@@ -21,11 +21,12 @@ public class MainActivity extends AppCompatActivity {
             public void onSelectedDayChange(CalendarView view, int year,
                                             int month, int dayOfMonth) {
                 // Форматируем выбранную дату
-                String selectedDate = String.format("%02d-%02d-%d", month + 1, dayOfMonth, year);
+                String selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
 
                 // Создаем Intent для перехода на SecondActivity
                 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 intent.putExtra("SELECTED_DATE", selectedDate); // Передаем выбранную дату
+                intent.putExtra("DATABASE_NAME", "tasks.db"); // Передаем фиксированное имя базы данных
 
                 // Запускаем SecondActivity
                 startActivity(intent);

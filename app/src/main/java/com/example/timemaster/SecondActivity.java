@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +18,8 @@ public class SecondActivity extends AppCompatActivity {
     private ListView listView;
     private List<String> itemList;
     private ArrayAdapter<String> adapter;
+    private DatabaseHelper databaseHelper;
+    private String selectedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +32,14 @@ public class SecondActivity extends AppCompatActivity {
 
         // Получаем переданную дату из Intent
         Intent intent = getIntent();
-        String selectedDate = intent.getStringExtra("SELECTED_DATE");
+        selectedDate = intent.getStringExtra("SELECTED_DATE");
 
-        // Создаем список элементов
+        // Инициализируем DatabaseHelper
+        databaseHelper = new DatabaseHelper(this);
+
+        // Создаем список элементов и загружаем данные из базы данных
         itemList = new ArrayList<>();
-        itemList.add("Selected Date: " + selectedDate);
-        itemList.add("Item 1");
-        itemList.add("Item 2");
-        itemList.add("Item 3");
-        itemList.add("Item 4");
-        itemList.add("Item 5");
+        loadTasks(selectedDate);
 
         // Создаем адаптер и устанавливаем его для ListView
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, itemList);
@@ -62,6 +63,12 @@ public class SecondActivity extends AppCompatActivity {
         });
     }
 
+    private void loadTasks(String date) {
+        // Загружаем задачи из базы данных для выбранной даты
+        List<String> tasks = databaseHelper.getTasksForDate(date);
+        itemList.addAll(tasks);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -69,10 +76,13 @@ public class SecondActivity extends AppCompatActivity {
             // Получаем новое имя задачи из Intent
             String newItem = data.getStringExtra("NEW_ITEM");
             if (newItem != null) {
-                // Добавляем новую задачу в список
+                // Добавляем новую задачу в список и в базу данных
                 itemList.add(newItem);
+                databaseHelper.addTask(selectedDate, newItem); // Сохраняем задачу в базе данных
                 // Уведомляем адаптер об изменениях
                 adapter.notifyDataSetChanged();
+                Toast.makeText(this, "Задача добавлена", Toast.LENGTH_SHORT).show();
             }
         }
-    }}
+    }
+}
