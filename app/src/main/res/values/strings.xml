@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">TimeMaster</string>
     <string name="clear_all">Очистить все</string> <!-- Описание для кнопки очистить -->
+    <string name="time_picker_title">Выберите время</string>
+    <string name="time_picker_hour">Часы</string>
+    <string name="time_picker_minute">Минуты</string>
+    <string name="time_picker_ok">ОК</string>
+    <string name="time_picker_cancel">Отмена</string>
 </resources>
