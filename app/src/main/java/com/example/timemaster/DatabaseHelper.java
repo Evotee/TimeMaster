@@ -24,6 +24,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createDatabaseFolder(context);
     }
 
+    public void clearTasksForDate(String date) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME, COLUMN_DATE + "=?", new String[]{date});
+        db.close();
+    }
+
+
     private static String getDatabasePath(Context context) {
         return context.getFilesDir() + "/bd/" + DATABASE_NAME;
     }
