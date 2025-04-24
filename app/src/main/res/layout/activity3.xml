@@ -9,7 +9,7 @@
         android:id="@+id/button_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:text="Назад"
         android:backgroundTint="@color/colorPrimary"
         android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +54,15 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="8dp" />
 
+    <CheckBox
+        android:id="@+id/checkBox_all_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Весь день"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox3"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
     <Button
         android:id="@+id/button_save"
         android:layout_width="0dp"
@@ -61,10 +70,9 @@
         android:text="Сохранить"
         android:backgroundTint="@color/colorAccent"
         android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox3"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_all_day"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

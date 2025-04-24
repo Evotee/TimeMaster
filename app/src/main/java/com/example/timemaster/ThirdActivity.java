@@ -15,7 +15,7 @@ import com.google.android.material.timepicker.TimeFormat;
 
 public class ThirdActivity extends AppCompatActivity {
 
-    private CheckBox checkBox1, checkBox2, checkBox3; // checkBox2 - это чекбокс для напоминания
+    private CheckBox checkBox1, checkBox2, checkBox3, checkBoxAllDay; // Добавлен чекбокс для "Весь день"
     private EditText editText;
     private Button buttonSave, buttonBack;
 
@@ -28,6 +28,7 @@ public class ThirdActivity extends AppCompatActivity {
         checkBox1 = findViewById(R.id.checkBox1);
         checkBox2 = findViewById(R.id.checkBox2); // Чекбокс для напоминания
         checkBox3 = findViewById(R.id.checkBox3);
+        checkBoxAllDay = findViewById(R.id.checkBox_all_day); // Инициализация чекбокса "Весь день"
         editText = findViewById(R.id.editText);
         buttonSave = findViewById(R.id.button_save);
         buttonBack = findViewById(R.id.button_back); // Инициализация кнопки "Назад"
@@ -37,11 +38,12 @@ public class ThirdActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newItem = editText.getText().toString();
                 if (!newItem.isEmpty()) {
-                    if (checkBox2.isChecked()) { // Проверяем, отмечен ли чекбокс для напоминания
-                        // Открываем MaterialTimePicker, если чекбокс напоминания отмечен
+                    // Проверяем, отмечен ли хотя бы один чекбокс, и не отмечен ли чекбокс "Весь день"
+                    if ((checkBox1.isChecked() || checkBox2.isChecked() || checkBox3.isChecked()) && !checkBoxAllDay.isChecked()) {
+                        // Открываем MaterialTimePicker, если хотя бы один чекбокс отмечен и "Весь день" не отмечен
                         openTimePicker(newItem);
                     } else {
-                        // Если чекбокс не отмечен, просто возвращаем результат
+                        // Если ни один чекбокс не отмечен или "Весь день" отмечен, просто возвращаем результат
                         returnResult(newItem);
                     }
                 } else {
@@ -82,7 +84,6 @@ public class ThirdActivity extends AppCompatActivity {
         });
     }
 
-
     private void returnResult(String newItem) {
         // Создаем Intent для передачи данных обратно
         Intent resultIntent = new Intent();
@@ -91,7 +92,8 @@ public class ThirdActivity extends AppCompatActivity {
         finish(); // Закрываем ThirdActivity и возвращаемся в SecondActivity
     }
 
-    private void returnResult(String newItem, int hour, int minute) {
+
+        private void returnResult(String newItem, int hour, int minute) {
         // Создаем Intent для передачи данных обратно
         Intent resultIntent = new Intent();
         resultIntent.putExtra("NEW_ITEM", newItem);
