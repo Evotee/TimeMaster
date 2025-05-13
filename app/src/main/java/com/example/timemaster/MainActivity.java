@@ -21,10 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
         CalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-
             @Override
-            public void onSelectedDayChange(CalendarView view, int year,
-                                            int month, int dayOfMonth) {
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 // Форматируем выбранную дату
                 String selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
 

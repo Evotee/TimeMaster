@@ -33,20 +33,18 @@ public class SecondActivity extends AppCompatActivity {
         Button buttonPlus = findViewById(R.id.button_plus);
         Button buttonBack = findViewById(R.id.button_back);
         ImageButton buttonClearAll = findViewById(R.id.button_clear_all);
-
+        Button buttonCopyTasks = findViewById(R.id.button_copy_tasks);
 
         Intent intent = getIntent();
         selectedDate = intent.getStringExtra("SELECTED_DATE");
+        String databasePath = intent.getStringExtra("DATABASE_NAME");
 
-
-        databaseHelper = new DatabaseHelper(this);
-
+        databaseHelper = new DatabaseHelper(this, databasePath); // Используем новую базу данных
         itemList = new ArrayList<>();
         loadTasks(selectedDate);
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, itemList);
         listView.setAdapter(adapter);
-
 
         buttonPlus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,11 +61,17 @@ public class SecondActivity extends AppCompatActivity {
             }
         });
 
-
         buttonClearAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clearTasks();
+            }
+        });
+
+        buttonCopyTasks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyTasksToFirstActivity();
             }
         });
     }
@@ -108,6 +112,14 @@ public class SecondActivity extends AppCompatActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert) // Добавьте иконку, если хотите
                 .show();
+    }
+
+    private void copyTasksToFirstActivity() {
+        // Здесь вы можете реализовать логику копирования задач в FirstActivity
+        // Например, вы можете передать задачи в FirstActivity через Intent
+        Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+        intent.putStringArrayListExtra("TASKS_LIST", new ArrayList<>(itemList));
+        startActivity(intent);
     }
 
 

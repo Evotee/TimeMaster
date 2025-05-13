@@ -19,8 +19,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_DATE = "date";
     private static final String COLUMN_TASK = "task";
 
-    public DatabaseHelper(Context context) {
-        super(context, getDatabasePath(context), null, DATABASE_VERSION);
+    public DatabaseHelper(Context context, String databasePath) {
+        super(context, databasePath, null, DATABASE_VERSION);
         createDatabaseFolder(context);
     }
 
@@ -28,11 +28,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME, COLUMN_DATE + "=?", new String[]{date});
         db.close();
-    }
-
-
-    private static String getDatabasePath(Context context) {
-        return context.getFilesDir() + "/bd/" + DATABASE_NAME;
     }
 
     private void createDatabaseFolder(Context context) {
@@ -64,6 +59,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_TASK, task);
         db.insert(TABLE_NAME, null, values);
         db.close();
+    }
+
+    public void copyTasksToNewDatabase(String newDatabasePath) {
+        SQLiteDatabase oldDb = this.getReadableDatabase();
+        SQLiteDatabase newDb = SQLiteDatabase.openOrCreateDatabase(newDatabasePath, null);
+
+        // Создаем таблицу в новой базе данных
+        String createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_DATE + " TEXT, " +
+                COLUMN_TASK + " TEXT)";
+        newDb.execSQL(createTable);
+
+        // Копируем данные
+        Cursor cursor = oldDb.query(TABLE_NAME, null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_DATE, cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
+                values.put(COLUMN_TASK, cursor.getString(cursor.getColumnIndex(COLUMN_TASK)));
+                newDb.insert(TABLE_NAME, null, values);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        oldDb.close();
+        newDb.close();
     }
 
     public List<String> getTasksForDate(String date) {
