@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
                 // Показываем Toast с выбранной датой (по желанию)
-                Toast.makeText(getApplicationContext(), selectedDate, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Выбрана дата: " + selectedDate, Toast.LENGTH_LONG).show();
             }
         });
     }

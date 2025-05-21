@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
+import java.util.Calendar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,7 +74,7 @@ public class SecondActivity extends AppCompatActivity {
         buttonCopyTasks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyTasksToFirstActivity();
+                showDatePicker(); // Показываем диалог выбора даты
             }
         });
     }
@@ -114,14 +117,38 @@ public class SecondActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void copyTasksToFirstActivity() {
-        // Здесь вы можете реализовать логику копирования задач в FirstActivity
-        // Например, вы можете передать задачи в FirstActivity через Intent
-        Intent intent = new Intent(SecondActivity.this, MainActivity.class);
-        intent.putStringArrayListExtra("TASKS_LIST", new ArrayList<>(itemList));
-        startActivity(intent);
+    private void showDatePicker() {
+        // Получаем текущую дату
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Создаем диалог выбора даты
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {                        // Форматируем выбранную дату
+                        String newDate = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
+                        copyTasksToNewDate(newDate); // Копируем задачи на новую дату
+                    }
+                }, year, month, day);
+        datePickerDialog.show(); // Показываем диалог выбора даты
     }
 
+    private void copyTasksToNewDate(String newDate) {
+        // Копируем задачи на новую дату в базе данных
+        for (String task : itemList) {
+            databaseHelper.addTask(newDate, task); // Сохраняем каждую задачу на новую дату
+        }
+
+        // Загружаем задачи для новой даты и обновляем список
+        itemList.clear(); // Очищаем текущий список
+        loadTasks(newDate); // Загружаем задачи для новой даты
+        adapter.notifyDataSetChanged(); // Уведомляем адаптер об изменениях
+
+        Toast.makeText(this, "Задачи скопированы на " + newDate, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -140,3 +167,4 @@ public class SecondActivity extends AppCompatActivity {
         }
     }
 }
+
